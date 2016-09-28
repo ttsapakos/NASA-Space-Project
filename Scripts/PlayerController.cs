@@ -25,14 +25,26 @@ public class PlayerController : MonoBehaviour {
 	void Start () {
 		rb = GetComponent<Rigidbody2D> ();
 		explosionEffect = GetComponentInChildren<ParticleSystem> ();
-		explosionEffect.Pause ();
+		init ();
+	}
+
+	void init() {
 		thruster = false;
 		leftGround = false;
 		rotateCW = false;
 		rotateCCW = false;
 		canMove = true;
+		transform.position = Vector3.zero;
+		transform.rotation = Quaternion.identity;
 		closestPlanet = gc.getClosestPlanet (transform.position);
+		this.GetComponent<SpriteRenderer> ().enabled = true;
+		explosionEffect.Clear ();
 		Earth = closestPlanet;
+		gc.setOffset (Vector3.Distance (Earth.transform.position, transform.position));
+	}
+
+	public void reset() {
+		init ();
 	}
 
 	void applyGravityAndAirResistance () {
@@ -92,7 +104,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 
-	void zoomOut () {
+	void zoom () {
 		float targetOrtho = rb.velocity.magnitude;
 
 		if (targetOrtho < minZoom) {
@@ -112,18 +124,22 @@ public class PlayerController : MonoBehaviour {
 		if (leftGround) {
 			canMove = false;
 			rb.velocity = Vector3.zero;
+			rb.freezeRotation = true;
 			this.GetComponent<SpriteRenderer> ().enabled = false;
 			explosionEffect.Play ();
+			gc.setCanReset (true);
 		}
 	}
 
 	// Update is called once per frame
 	void Update () {
 		closestPlanet = gc.getClosestPlanet (transform.position);
-		gc.setTotalDistance(Vector3.Distance(Earth.transform.position, transform.position));
+		if (!gc.getCanReset ()) {
+			gc.setTotalDistance (Vector3.Distance (Earth.transform.position, transform.position));
+			updateThruster ();
+			updateRotation ();
+		}
 		applyGravityAndAirResistance ();
-		updateThruster ();
-		updateRotation ();
-		zoomOut ();
+		zoom ();
 	}
 }

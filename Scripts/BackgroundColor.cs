@@ -18,7 +18,7 @@ public class BackgroundColor : MonoBehaviour {
 	}
 
 	void updateBackgroundColor() {
-		float fadeFactor = (gc.getCurrectDistance() - colorOffset) / atmosphereHeight;
+		float fadeFactor = (gc.getCurrentDistance() - colorOffset) / atmosphereHeight;
 		rend.material.color = new Color (initialColor.r - fadeFactor, initialColor.g - fadeFactor, initialColor.b - fadeFactor, initialColor.a - fadeFactor);
 	}
 	
