@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
 	public float maxZoom;
 	public float smoothSpeed;
 	public float currentHealth;
+	public float maxHealth;
 
 	private Rigidbody2D rb;
 	private GameObject closestPlanet;
@@ -20,8 +21,6 @@ public class PlayerController : MonoBehaviour {
 	private bool canMove;
 	private float thrust;
 	private float rotateMultiplier;
-	private float maxHealth;
-
 
 	// Use this for initialization
 	void Start () {
@@ -153,6 +152,7 @@ public class PlayerController : MonoBehaviour {
 
 	// Stop the gameplay, disable user input, and play the explosion effect
 	void stop() {
+		currentHealth = 0;
 		canMove = false;
 		rb.velocity = Vector3.zero;
 		rb.freezeRotation = true;

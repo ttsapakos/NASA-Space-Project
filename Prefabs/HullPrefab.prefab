@@ -22,7 +22,7 @@ GameObject:
   - 114: {fileID: 114000010265800132}
   m_Layer: 0
   m_Name: HullPrefab
-  m_TagString: Untagged
+  m_TagString: Hull
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
