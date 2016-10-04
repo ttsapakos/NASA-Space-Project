@@ -4,11 +4,10 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
 	public GameController gc;
-	public float thrust;
-	public float rotateMultiplier;
 	public float minZoom;
 	public float maxZoom;
 	public float smoothSpeed;
+	public float currentHealth;
 
 	private Rigidbody2D rb;
 	private GameObject closestPlanet;
@@ -19,6 +18,9 @@ public class PlayerController : MonoBehaviour {
 	private bool rotateCCW;
 	private bool rotateCW;
 	private bool canMove;
+	private float thrust;
+	private float rotateMultiplier;
+	private float maxHealth;
 
 
 	// Use this for initialization
@@ -28,29 +30,40 @@ public class PlayerController : MonoBehaviour {
 		init ();
 	}
 
+	// initialize the player for new round
 	void init() {
 		thruster = false;
 		leftGround = false;
 		rotateCW = false;
 		rotateCCW = false;
 		canMove = true;
+		this.GetComponent<SpriteRenderer> ().enabled = true;
+
+		// Reset these as they may have been changed in the store(?)
+		thrust = GetComponentInChildren<ThrusterScript> ().thrust;
+		rotateMultiplier = GetComponentInChildren<WingsScript> ().rotateMultiplier;
+		maxHealth = GetComponentInChildren<HullScript> ().maxHealth;
+
+		currentHealth = maxHealth;
 		transform.position = Vector3.zero;
 		transform.rotation = Quaternion.identity;
 		closestPlanet = gc.getClosestPlanet (transform.position);
-		this.GetComponent<SpriteRenderer> ().enabled = true;
 		explosionEffect.Clear ();
 		Earth = closestPlanet;
 		gc.setOffset (Vector3.Distance (Earth.transform.position, transform.position));
 	}
 
+	// reset the player for a new round
 	public void reset() {
 		init ();
 	}
 
-	void applyGravityAndAirResistance () {
+	// apply gravitational force
+	void applyGravity () {
 		rb.AddForce((closestPlanet.transform.position - transform.position).normalized * closestPlanet.transform.localScale.x / 4);
 	}
-		
+
+	// update the player's thruster based on input and turning stats
 	void updateThruster () {
 		if (!canMove)
 			return;
@@ -73,8 +86,8 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
+	// update the player's rotation based on input and turning stats
 	void updateRotation () {
-
 		if (!canMove)
 			return;
 		
@@ -103,7 +116,7 @@ public class PlayerController : MonoBehaviour {
 
 	}
 
-
+	// zoom the camera in or out based on velocity
 	void zoom () {
 		float targetOrtho = rb.velocity.magnitude;
 
@@ -119,27 +132,45 @@ public class PlayerController : MonoBehaviour {
 		Camera.main.orthographicSize = Mathf.MoveTowards (Camera.main.orthographicSize, targetOrtho, smoothSpeed * Time.deltaTime);
 	}
 
-
-	void OnCollisionEnter2D(Collision2D col) {
-		if (leftGround) {
-			canMove = false;
-			rb.velocity = Vector3.zero;
-			rb.freezeRotation = true;
-			this.GetComponent<SpriteRenderer> ().enabled = false;
-			explosionEffect.Play ();
-			gc.setCanReset (true);
+	// For collisions with objects whose colliders are triggers, i.e. Obstacles
+	void OnTriggerEnter2D(Collider2D col) {
+		// Double check that we are indeed hitting and obstacle
+		if (col.gameObject.CompareTag ("Obstacle")) {
+			currentHealth -= col.gameObject.GetComponent<ObstacleScript> ().damage;
 		}
+		if (leftGround && currentHealth <= 0) {
+			stop ();
+		}
+	}
+
+	// For collisions with objects whose colliders aren't triggers, i.e. Planets
+	void OnCollisionEnter2D(Collision2D col) {
+		// double check that we are hitting a planet
+		if (col.gameObject.CompareTag("Planet") && leftGround) {
+			stop ();
+		}
+	}
+
+	// Stop the gameplay, disable user input, and play the explosion effect
+	void stop() {
+		canMove = false;
+		rb.velocity = Vector3.zero;
+		rb.freezeRotation = true;
+		this.GetComponent<SpriteRenderer> ().enabled = false;
+		explosionEffect.Play ();
+		gc.setCanReset (true);
 	}
 
 	// Update is called once per frame
 	void Update () {
-		closestPlanet = gc.getClosestPlanet (transform.position);
+		// only update if the player hasn't yet crashed
 		if (!gc.getCanReset ()) {
+			closestPlanet = gc.getClosestPlanet (transform.position);
 			gc.setTotalDistance (Vector3.Distance (Earth.transform.position, transform.position));
 			updateThruster ();
 			updateRotation ();
+			applyGravity ();
 		}
-		applyGravityAndAirResistance ();
 		zoom ();
 	}
 }
