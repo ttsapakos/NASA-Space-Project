@@ -5,7 +5,6 @@ using System.Collections;
 public class GameController : MonoBehaviour {
 
 	public GameObject resetGUI;
-
 	private PlayerController playerController;
 	private PlayerStats playerStats;
 	private GameObject[] planets;

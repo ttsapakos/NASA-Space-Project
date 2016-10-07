@@ -7,8 +7,9 @@ public class PlayerController : MonoBehaviour {
 	public float minZoom;
 	public float maxZoom;
 	public float smoothSpeed;
-	public float currentHealth;
-	public float maxHealth;
+	public float fuelDecayRate;
+	public float oxygenDecayRate;
+
 
 	private Rigidbody2D rb;
 	private GameObject closestPlanet;
@@ -21,6 +22,25 @@ public class PlayerController : MonoBehaviour {
 	private bool canMove;
 	private float thrust;
 	private float rotateMultiplier;
+	private float maxOxygen;
+	private float currentOxygen;
+	private float maxFuel;
+	private float currentFuel;
+	private float maxHealth;
+	private float currentHealth;
+
+	// Getters for current levels of resources
+	public float getCurrentFuel() {
+		return currentFuel;
+	}
+
+	public float getCurrentHealth() {
+		return currentHealth;
+	}
+
+	public float getCurrentOxygen() {
+		return currentOxygen;
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -42,7 +62,11 @@ public class PlayerController : MonoBehaviour {
 		thrust = GetComponentInChildren<ThrusterScript> ().thrust;
 		rotateMultiplier = GetComponentInChildren<WingsScript> ().rotateMultiplier;
 		maxHealth = GetComponentInChildren<HullScript> ().maxHealth;
+		maxOxygen = GetComponentInChildren<NoseConeScript> ().maxOxygen;
+		maxFuel = GetComponentInChildren<FuelPodScript> ().maxFuel;
 
+		currentOxygen = maxOxygen;
+		currentFuel = maxFuel;
 		currentHealth = maxHealth;
 		transform.position = Vector3.zero;
 		transform.rotation = Quaternion.identity;
@@ -76,12 +100,13 @@ public class PlayerController : MonoBehaviour {
 			thruster = false;
 		}
 
-		if (thruster) {
+		if (thruster && currentFuel > 0) {
 			// Applies force to the rocket at the right angle
 			float xThrust = Mathf.Sin(transform.rotation.eulerAngles.z * Mathf.Deg2Rad) * thrust * -1;
 			float yThrust = Mathf.Cos(transform.rotation.eulerAngles.z * Mathf.Deg2Rad) * thrust;
 			Vector2 force = new Vector3 (xThrust, yThrust);
 			rb.AddForce (force);
+			currentFuel -= fuelDecayRate;
 		}
 	}
 
@@ -150,6 +175,13 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
+	void decayOxygen () {
+		currentOxygen -= oxygenDecayRate;
+		if (currentOxygen <= 0) {
+			stop ();
+		}
+	}
+
 	// Stop the gameplay, disable user input, and play the explosion effect
 	void stop() {
 		currentHealth = 0;
@@ -170,6 +202,7 @@ public class PlayerController : MonoBehaviour {
 			updateThruster ();
 			updateRotation ();
 			applyGravity ();
+			decayOxygen ();
 		}
 		zoom ();
 	}

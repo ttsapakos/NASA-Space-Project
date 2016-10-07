@@ -28,7 +28,7 @@ public class HealthBarScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		currentHealth = GetComponentInParent<PlayerController> ().currentHealth;
+		currentHealth = GetComponentInParent<PlayerController> ().getCurrentHealth();
 		updateHealth ();
 		GetComponent<RectTransform> ().localScale = new Vector3(initialWidth * (currentHealth / maxHealth), GetComponent<RectTransform> ().localScale.y, 0);
 	}
