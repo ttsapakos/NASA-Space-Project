@@ -5,6 +5,7 @@ using System.Collections;
 public class GameController : MonoBehaviour {
 
 	public GameObject resetGUI;
+
 	private PlayerController playerController;
 	private PlayerStats playerStats;
 	private GameObject[] planets;
@@ -13,6 +14,8 @@ public class GameController : MonoBehaviour {
 	private float currentDistance;
 	private bool canReset;
 	private float offset;
+	private float nextTimeToSearch = 0;
+	private GameObject closestPlanet;
 
 	// Use this for initialization
 	void Start () {
@@ -20,6 +23,11 @@ public class GameController : MonoBehaviour {
 		playerStats = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerStats> ();
 
 		planets = GameObject.FindGameObjectsWithTag ("Planet");
+		if (planets.Length > 0) {
+			closestPlanet = planets [0];
+		} else {
+			Debug.LogError ("No planets were found at the start of the game");
+		}
 		resetText = resetGUI.GetComponent<Text> ();
 		init ();
 	}
@@ -57,22 +65,24 @@ public class GameController : MonoBehaviour {
 	}
 
 	public GameObject getClosestPlanet (Vector3 playerPos) {
-		GameObject result = planets[0];
-		foreach (GameObject planet in planets) {
-			if (Vector3.Distance (planet.transform.position, playerPos) < Vector3.Distance (result.transform.position, playerPos)) {
-				result = planet;
+		if (nextTimeToSearch <= Time.time) {
+			foreach (GameObject planet in planets) {
+				if (Vector3.Distance (planet.transform.position, playerPos) < Vector3.Distance (closestPlanet.transform.position, playerPos)) {
+					closestPlanet = planet;
+				}
 			}
+			nextTimeToSearch = Time.time + 0.5f;
 		}
-
-		return result;
+			
+		return closestPlanet;
 	}
 
 	public void setTotalDistance(float distance) {
 		if ((distance - offset) > maxDistance) {
-			maxDistance = (distance - offset);
+			maxDistance = Mathf.Abs(distance - offset);
 		}
 
-		currentDistance = (distance - offset);
+		currentDistance = Mathf.Abs(distance - offset);
 	}
 
 	float distanceToDollars() {
