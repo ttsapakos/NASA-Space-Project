@@ -15,6 +15,10 @@ public class RadarScript : MonoBehaviour {
 	private float distanceToClosestPlanet;
 	private float nextTimeToSearch = 0;
 
+	public float getDistanceToClosestPlanet () {
+		return distanceToClosestPlanet;
+	}
+
 	// Use this for initialization
 	void Start () {
 		gc = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
@@ -25,6 +29,7 @@ public class RadarScript : MonoBehaviour {
 		text.enabled = false;
 	}
 		
+	// Update the radar to point to the closest planet
 	void updateRadar () {
 		if (nextTimeToSearch <= Time.time) {
 			distanceToClosestPlanet = Vector3.Distance (closestPlanet.transform.position, playerPos) - (closestPlanet.transform.localScale.x * closestPlanet.GetComponent<CircleCollider2D> ().radius);
