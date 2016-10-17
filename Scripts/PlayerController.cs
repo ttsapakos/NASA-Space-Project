@@ -15,6 +15,13 @@ public class PlayerController : MonoBehaviour {
 	private GameObject closestPlanet;
 	private ParticleSystem explosionEffect;
 	private GameObject Earth;
+
+	private GameObject thrusterObject;
+	private GameObject wingsObject;
+	private GameObject hullObject;
+	private GameObject noseConeObject;
+	private GameObject fuelPodObject;
+
 	private bool thruster;
 	private bool leftGround;
 	private bool rotateCCW;
@@ -56,7 +63,12 @@ public class PlayerController : MonoBehaviour {
 		rotateCW = false;
 		rotateCCW = false;
 		canMove = true;
-		this.GetComponent<SpriteRenderer> ().enabled = true;
+
+		thrusterObject = GameObject.FindGameObjectWithTag ("Thruster");
+		wingsObject = GameObject.FindGameObjectWithTag ("Wings");
+		hullObject = GameObject.FindGameObjectWithTag ("Hull");
+		noseConeObject = GameObject.FindGameObjectWithTag ("NoseCone");
+		fuelPodObject = GameObject.FindGameObjectWithTag ("FuelPod");
 
 		// Reset these as they may have been changed in the store(?)
 		thrust = GetComponentInChildren<ThrusterScript> ().thrust;
@@ -74,6 +86,7 @@ public class PlayerController : MonoBehaviour {
 		explosionEffect.Clear ();
 		Earth = closestPlanet;
 		gc.setOffset (Vector3.Distance (Earth.transform.position, transform.position));
+		showParts ();
 	}
 
 	// reset the player for a new round
@@ -170,7 +183,7 @@ public class PlayerController : MonoBehaviour {
 	// For collisions with objects whose colliders aren't triggers, i.e. Planets
 	void OnCollisionEnter2D(Collision2D col) {
 		// double check that we are hitting a planet
-		if (col.gameObject.CompareTag("Planet") && leftGround) {
+		if ((col.gameObject.CompareTag("Planet") || col.gameObject.CompareTag("Earth")) && leftGround) {
 			stop ();
 		}
 	}
@@ -182,15 +195,32 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
+	void showParts () {
+		thrusterObject.GetComponent<SpriteRenderer> ().enabled = true;
+		wingsObject.GetComponent<SpriteRenderer> ().enabled = true;
+		hullObject.GetComponent<SpriteRenderer> ().enabled = true;
+		noseConeObject.GetComponent<SpriteRenderer> ().enabled = true;
+		fuelPodObject.GetComponent<SpriteRenderer> ().enabled = true;
+	}
+
+	// hide the ship parts
+	void hideParts () {
+		thrusterObject.GetComponent<SpriteRenderer> ().enabled = false;
+		wingsObject.GetComponent<SpriteRenderer> ().enabled = false;
+		hullObject.GetComponent<SpriteRenderer> ().enabled = false;
+		noseConeObject.GetComponent<SpriteRenderer> ().enabled = false;
+		fuelPodObject.GetComponent<SpriteRenderer> ().enabled = false;
+	}
+
 	// Stop the gameplay, disable user input, and play the explosion effect
 	void stop() {
 		currentHealth = 0;
 		canMove = false;
 		rb.velocity = Vector3.zero;
 		rb.freezeRotation = true;
-		this.GetComponent<SpriteRenderer> ().enabled = false;
 		explosionEffect.Play ();
 		gc.setCanReset (true);
+		hideParts ();
 	}
 
 	// Update is called once per frame
