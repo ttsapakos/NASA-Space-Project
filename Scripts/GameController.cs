@@ -7,6 +7,8 @@ public class GameController : MonoBehaviour {
 
 	// Reset text gui object
 	public GameObject resetGUI;
+	// the distance at which the planet can be removed
+	public float removePlanetDistance;
 
 	private PlayerController playerController;
 	private PlayerStats playerStats;
@@ -39,8 +41,8 @@ public class GameController : MonoBehaviour {
 		resetGUI.SetActive (false);
 		maxDistance = 0;
 		canReset = false;
-		foreach (GameObject p in planets) {
-			GameObject.Destroy (p);
+		for (int i = 0; i < planets.Count; i++) {
+			GameObject.Destroy (planets [i]);
 		}
 		planets.Clear ();
 		closestPlanet = earth;
@@ -78,9 +80,16 @@ public class GameController : MonoBehaviour {
 	// Returns the closest planet to the given position
 	public GameObject getClosestPlanet (Vector3 playerPos) {
 		if (nextTimeToSearch <= Time.time) {
-			foreach (GameObject planet in planets) {
-				if (Vector3.Distance (planet.transform.position, playerPos) < Vector3.Distance (closestPlanet.transform.position, playerPos)) {
-					closestPlanet = planet;
+			for (int i = 0; i < planets.Count; i++) {
+				float distanceToPlanet = Vector3.Distance (planets[i].transform.position, playerPos);
+				if (distanceToPlanet < Vector3.Distance (closestPlanet.transform.position, playerPos)) {
+					closestPlanet = planets[i];
+				}
+					
+				if (distanceToPlanet > removePlanetDistance) {
+					GameObject planet = planets [i];
+					planets.RemoveAt (i);
+					GameObject.Destroy (planet);
 				}
 			}
 			nextTimeToSearch = Time.time + 0.5f;

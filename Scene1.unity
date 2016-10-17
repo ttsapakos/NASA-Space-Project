@@ -706,6 +706,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resetGUI: {fileID: 1281441510}
+  removePlanetDistance: 3000
 --- !u!4 &1133919901
 Transform:
   m_ObjectHideFlags: 0
@@ -732,10 +733,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planetPrefab: {fileID: 1000011336105834, guid: 457f263c76ad9425b96b2fd06810642e,
     type: 2}
-  minSpawnDistance: 500
-  maxSpawnDistance: 2000
+  minSpawnDistance: 400
+  maxSpawnDistance: 800
   minWidth: 10
   maxWidth: 40
+  veloMultiplier: 1
 --- !u!1 &1178641665
 GameObject:
   m_ObjectHideFlags: 0
