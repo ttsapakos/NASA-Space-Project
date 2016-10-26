@@ -9,11 +9,12 @@ public class PlayerController : MonoBehaviour {
 	public float smoothSpeed;
 	public float fuelDecayRate;
 	public float oxygenDecayRate;
-
+	public float gravityMultiplier;
 
 	private Rigidbody2D rb;
 	private GameObject closestPlanet;
 	private ParticleSystem explosionEffect;
+	private ParticleSystem thrusterEffect;
 	private GameObject Earth;
 
 	private GameObject thrusterObject;
@@ -52,7 +53,9 @@ public class PlayerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody2D> ();
-		explosionEffect = GetComponentInChildren<ParticleSystem> ();
+		explosionEffect = GameObject.FindGameObjectWithTag ("Explosion").GetComponent<ParticleSystem> ();
+		thrusterEffect = GameObject.FindGameObjectWithTag ("ThrusterEffect").GetComponent<ParticleSystem> ();
+		Earth = gc.getClosestPlanet (transform.position);
 		init ();
 	}
 
@@ -77,14 +80,14 @@ public class PlayerController : MonoBehaviour {
 		maxOxygen = GetComponentInChildren<NoseConeScript> ().maxOxygen;
 		maxFuel = GetComponentInChildren<FuelPodScript> ().maxFuel;
 
+		closestPlanet = Earth;
 		currentOxygen = maxOxygen;
 		currentFuel = maxFuel;
 		currentHealth = maxHealth;
 		transform.position = Vector3.zero;
 		transform.rotation = Quaternion.identity;
-		closestPlanet = gc.getClosestPlanet (transform.position);
 		explosionEffect.Clear ();
-		Earth = closestPlanet;
+		thrusterEffect.Clear ();
 		gc.setOffset (Vector3.Distance (Earth.transform.position, transform.position));
 		showParts ();
 	}
@@ -96,7 +99,7 @@ public class PlayerController : MonoBehaviour {
 
 	// apply gravitational force
 	void applyGravity () {
-		rb.AddForce((closestPlanet.transform.position - transform.position).normalized * closestPlanet.transform.localScale.x / 4);
+		rb.AddForce((closestPlanet.transform.position - transform.position).normalized * (closestPlanet.transform.localScale.x * gravityMultiplier));
 	}
 
 	// update the player's thruster based on input and turning stats
@@ -107,10 +110,12 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			thruster = true;
 			leftGround = true;
+			thrusterEffect.Play ();
 		}
 
 		if (Input.GetKeyUp (KeyCode.Space)) {
 			thruster = false;
+			thrusterEffect.Stop ();
 		}
 
 		if (thruster && currentFuel > 0) {
@@ -183,7 +188,7 @@ public class PlayerController : MonoBehaviour {
 	// For collisions with objects whose colliders aren't triggers, i.e. Planets
 	void OnCollisionEnter2D(Collision2D col) {
 		// double check that we are hitting a planet
-		if ((col.gameObject.CompareTag("Planet") || col.gameObject.CompareTag("Earth")) && leftGround) {
+		if (!col.gameObject.CompareTag ("Obstacle") && leftGround) {
 			stop ();
 		}
 	}
@@ -218,6 +223,7 @@ public class PlayerController : MonoBehaviour {
 		canMove = false;
 		rb.velocity = Vector3.zero;
 		rb.freezeRotation = true;
+		thrusterEffect.Stop ();
 		explosionEffect.Play ();
 		gc.setCanReset (true);
 		hideParts ();
