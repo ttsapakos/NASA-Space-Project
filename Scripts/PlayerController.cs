@@ -99,7 +99,13 @@ public class PlayerController : MonoBehaviour {
 
 	// apply gravitational force
 	void applyGravity () {
-		rb.AddForce((closestPlanet.transform.position - transform.position).normalized * (closestPlanet.transform.localScale.x * gravityMultiplier));
+		// The x and y splif values for gravity
+		Vector3 gravityDirection = (closestPlanet.transform.position - transform.position).normalized;
+		// the force of the gravity based on the distance from the planet
+		float distanceForce = closestPlanet.transform.localScale.x / Vector3.Distance (closestPlanet.transform.position, transform.position);
+		// total gravity force = direction (x,y), the size of the planet, the multiplier, and the force divided by distance
+		Vector3 gravityForce = gravityDirection * closestPlanet.transform.localScale.x * gravityMultiplier * distanceForce;
+		rb.AddForce(gravityForce);
 	}
 
 	// update the player's thruster based on input and turning stats
