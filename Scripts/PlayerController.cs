@@ -56,6 +56,7 @@ public class PlayerController : MonoBehaviour {
 		explosionEffect = GameObject.FindGameObjectWithTag ("Explosion").GetComponent<ParticleSystem> ();
 		thrusterEffect = GameObject.FindGameObjectWithTag ("ThrusterEffect").GetComponent<ParticleSystem> ();
 		Earth = gc.getClosestPlanet (transform.position);
+		canMove = true;
 		init ();
 	}
 
@@ -65,7 +66,6 @@ public class PlayerController : MonoBehaviour {
 		leftGround = false;
 		rotateCW = false;
 		rotateCCW = false;
-		canMove = true;
 
 		thrusterObject = GameObject.FindGameObjectWithTag ("Thruster");
 		wingsObject = GameObject.FindGameObjectWithTag ("Wings");
@@ -97,6 +97,12 @@ public class PlayerController : MonoBehaviour {
 		init ();
 	}
 
+	// public function to allow the store to dictate when the player can move
+	public void letMove () {
+		this.canMove = true;
+		init ();
+	}
+
 	// apply gravitational force
 	void applyGravity () {
 		// The x and y splif values for gravity
@@ -116,21 +122,22 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			thruster = true;
 			leftGround = true;
-			thrusterEffect.Play ();
 		}
 
 		if (Input.GetKeyUp (KeyCode.Space)) {
 			thruster = false;
-			thrusterEffect.Stop ();
 		}
 
 		if (thruster && currentFuel > 0) {
 			// Applies force to the rocket at the right angle
-			float xThrust = Mathf.Sin(transform.rotation.eulerAngles.z * Mathf.Deg2Rad) * thrust * -1;
-			float yThrust = Mathf.Cos(transform.rotation.eulerAngles.z * Mathf.Deg2Rad) * thrust;
+			float xThrust = Mathf.Sin (transform.rotation.eulerAngles.z * Mathf.Deg2Rad) * thrust * -1;
+			float yThrust = Mathf.Cos (transform.rotation.eulerAngles.z * Mathf.Deg2Rad) * thrust;
 			Vector2 force = new Vector3 (xThrust, yThrust);
 			rb.AddForce (force);
 			currentFuel -= fuelDecayRate;
+			thrusterEffect.Play ();
+		} else {
+			thrusterEffect.Stop ();
 		}
 	}
 
@@ -200,9 +207,11 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void decayOxygen () {
-		currentOxygen -= oxygenDecayRate;
-		if (currentOxygen <= 0) {
-			stop ();
+		if (this.leftGround) {
+			currentOxygen -= oxygenDecayRate;
+			if (currentOxygen <= 0) {
+				stop ();
+			}
 		}
 	}
 

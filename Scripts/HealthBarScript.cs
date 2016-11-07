@@ -10,11 +10,11 @@ public class HealthBarScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		initialWidth = GetComponent<RectTransform> ().localScale.x;
 		init ();
 	}
 
 	void init() {
+		initialWidth = GetComponent<RectTransform> ().localScale.x;
 		GameObject hull = GameObject.FindGameObjectWithTag ("Hull");
 		maxHealth = hull.GetComponent<HullScript> ().maxHealth;
 		currentHealth = maxHealth;

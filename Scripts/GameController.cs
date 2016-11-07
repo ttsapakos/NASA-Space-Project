@@ -25,6 +25,8 @@ public class GameController : MonoBehaviour {
 	private float offset;
 	private float nextTimeToSearch = 0;
 	private GameObject closestPlanet;
+	// The store object
+	private GameObject store;
 
 	// Use this for initialization
 	void Start () {
@@ -33,6 +35,8 @@ public class GameController : MonoBehaviour {
 		earth = GameObject.FindGameObjectWithTag ("Earth");
 		resetText = resetGUI.GetComponent<Text> ();
 		planets = new List<GameObject> ();
+		store = GameObject.FindGameObjectWithTag ("Store");
+		store.SetActive (false);
 		init ();
 	}
 
@@ -50,6 +54,7 @@ public class GameController : MonoBehaviour {
 
 	void reset() {
 		init ();
+		store.SetActive (true);
 		playerController.reset ();
 	}
 
@@ -109,7 +114,7 @@ public class GameController : MonoBehaviour {
 
 	// Calculates the amount of money to be awarded based on the total distance upon crashing
 	float distanceToDollars() {
-		return (float)System.Math.Round((getMaxDistance () / 10), 2);
+		return (float)System.Math.Round((getMaxDistance () * 10), 2);
 	}
 
 	// shows reset text, with distance traveled and money earned
