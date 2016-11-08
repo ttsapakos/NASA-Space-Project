@@ -14,7 +14,7 @@ public class OxygenBarScript : MonoBehaviour {
 		init ();
 	}
 
-	void init() {
+	public void init() {
 		GameObject hull = GameObject.FindGameObjectWithTag ("NoseCone");
 		maxOxygen = hull.GetComponent<NoseConeScript> ().maxOxygen;
 		currentOxygen = maxOxygen;

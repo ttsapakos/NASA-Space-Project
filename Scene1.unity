@@ -5386,7 +5386,7 @@ Prefab:
     - target: {fileID: 114000011677059404, guid: 8f4e9da3f9b6643478ba082b587700ec,
         type: 2}
       propertyPath: thrust
-      value: 60
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 212000010260226448, guid: 8f4e9da3f9b6643478ba082b587700ec,
         type: 2}
@@ -9804,8 +9804,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1839640613}
-        m_MethodName: letMove
+      - m_Target: {fileID: 1133919900}
+        m_MethodName: startRound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9818,6 +9818,17 @@ MonoBehaviour:
       - m_Target: {fileID: 1457229608}
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1839640613}
+        m_MethodName: letMove
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -13294,6 +13305,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resetGUI: {fileID: 1281441510}
   removePlanetDistance: 3000
+  healthBar: {fileID: 1781520467}
+  oxygenBar: {fileID: 1494823912}
+  fuelBar: {fileID: 202493342}
 --- !u!4 &1133919901
 Transform:
   m_ObjectHideFlags: 0
@@ -20045,6 +20059,12 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1774311082}
+--- !u!114 &1781520467 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114000013997063382, guid: 91854cfdd26d846cc99e7c4b5bc71634,
+    type: 2}
+  m_PrefabInternal: {fileID: 817220264}
+  m_Script: {fileID: 11500000, guid: 5b27769e24184473eab85a47fa622c0d, type: 3}
 --- !u!1 &1789540286
 GameObject:
   m_ObjectHideFlags: 0

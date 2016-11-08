@@ -14,7 +14,7 @@ public class FuelBarScript : MonoBehaviour {
 		init ();
 	}
 
-	void init() {
+	public void init() {
 		GameObject fuelPod = GameObject.FindGameObjectWithTag ("FuelPod");
 		maxFuel = fuelPod.GetComponent<FuelPodScript> ().maxFuel;
 		currentFuel = maxFuel;

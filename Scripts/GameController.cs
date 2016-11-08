@@ -9,6 +9,12 @@ public class GameController : MonoBehaviour {
 	public GameObject resetGUI;
 	// the distance at which the planet can be removed
 	public float removePlanetDistance;
+	// the health bar
+	public HealthBarScript healthBar;
+	// the oxygen bar
+	public OxygenBarScript oxygenBar;
+	// the fuel bar
+	public FuelBarScript fuelBar;
 
 	private PlayerController playerController;
 	private PlayerStats playerStats;
@@ -52,10 +58,18 @@ public class GameController : MonoBehaviour {
 		closestPlanet = earth;
 	}
 
+	// initialize everything and set the store to active
 	void reset() {
 		init ();
 		store.SetActive (true);
 		playerController.reset ();
+	}
+
+	// Called to start the round
+	public void startRound () {
+		healthBar.init ();
+		fuelBar.init ();
+		oxygenBar.init ();
 	}
 
 	public float getMaxDistance() {
