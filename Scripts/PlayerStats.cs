@@ -3,11 +3,14 @@ using System.Collections;
 
 public class PlayerStats : MonoBehaviour {
 
+	// the starting money
+	public float startingFunds;
+	// The player's total money
 	private float totalMoney;
 
 	// Use this for initialization
 	void Start () {
-		totalMoney = 0;
+		totalMoney = startingFunds;
 	}
 
 	public float getTotalMoney() {

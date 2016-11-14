@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour {
 	public float maxZoom;
 	public float smoothSpeed;
 	public float fuelDecayRate;
-	public float oxygenDecayRate;
+	public float powerDecayRate;
 	public float gravityMultiplier;
 
 	private Rigidbody2D rb;
@@ -30,8 +30,8 @@ public class PlayerController : MonoBehaviour {
 	private bool canMove;
 	private float thrust;
 	private float rotateMultiplier;
-	private float maxOxygen;
-	private float currentOxygen;
+	private float maxPower;
+	private float currentPower;
 	private float maxFuel;
 	private float currentFuel;
 	private float maxHealth;
@@ -46,10 +46,10 @@ public class PlayerController : MonoBehaviour {
 		return currentHealth;
 	}
 
-	public float getCurrentOxygen() {
-		return currentOxygen;
+	public float getCurrentPower() {
+		return currentPower;
 	}
-
+		
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody2D> ();
@@ -77,11 +77,11 @@ public class PlayerController : MonoBehaviour {
 		thrust = GetComponentInChildren<ThrusterScript> ().thrust;
 		rotateMultiplier = GetComponentInChildren<WingsScript> ().rotateMultiplier;
 		maxHealth = GetComponentInChildren<HullScript> ().maxHealth;
-		maxOxygen = GetComponentInChildren<NoseConeScript> ().maxOxygen;
+		maxPower = GetComponentInChildren<NoseConeScript> ().maxPower;
 		maxFuel = GetComponentInChildren<FuelPodScript> ().maxFuel;
 
 		closestPlanet = Earth;
-		currentOxygen = maxOxygen;
+		currentPower = maxPower;
 		currentFuel = maxFuel;
 		currentHealth = maxHealth;
 		transform.position = Vector3.zero;
@@ -206,10 +206,10 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	void decayOxygen () {
+	public void decayPower () {
 		if (this.leftGround) {
-			currentOxygen -= oxygenDecayRate;
-			if (currentOxygen <= 0) {
+			currentPower -= powerDecayRate;
+			if (currentPower <= 0) {
 				stop ();
 			}
 		}
@@ -253,7 +253,6 @@ public class PlayerController : MonoBehaviour {
 			updateThruster ();
 			updateRotation ();
 			applyGravity ();
-			decayOxygen ();
 		}
 		zoom ();
 	}

@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour {
 	// the health bar
 	public HealthBarScript healthBar;
 	// the oxygen bar
-	public OxygenBarScript oxygenBar;
+	public PowerBarScript powerBar;
 	// the fuel bar
 	public FuelBarScript fuelBar;
 
@@ -69,7 +69,7 @@ public class GameController : MonoBehaviour {
 	public void startRound () {
 		healthBar.init ();
 		fuelBar.init ();
-		oxygenBar.init ();
+		powerBar.init ();
 	}
 
 	public float getMaxDistance() {

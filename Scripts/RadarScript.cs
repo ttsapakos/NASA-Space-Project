@@ -14,6 +14,7 @@ public class RadarScript : MonoBehaviour {
 	private LineRenderer lr;
 	private float distanceToClosestPlanet;
 	private float nextTimeToSearch = 0;
+	private bool radarActive;
 
 	public float getDistanceToClosestPlanet () {
 		return distanceToClosestPlanet;
@@ -48,15 +49,29 @@ public class RadarScript : MonoBehaviour {
 		lr.SetPositions (positions);
 	}
 
+	//detect if the radar button is being pressed
+	void updateKeyPress () {
+		if (Input.GetKeyDown (KeyCode.R)) {
+			radarActive = true;
+		}
+
+		if (Input.GetKeyUp (KeyCode.R)) {
+			radarActive = false;
+		}
+	}
+
+
 	// Update is called once per frame
 	void Update () {
 		playerPos = pc.transform.position;
 		closestPlanet = gc.getClosestPlanet (playerPos);
 		updateRadar ();
 
-		if (!gc.getCanReset () && distanceToClosestPlanet > minDistance) {
+		updateKeyPress ();
+		if (radarActive) {
 			lr.SetWidth (0.25f, 0.25f);
 			text.enabled = true;
+			pc.decayPower ();
 		} else {
 			lr.SetWidth (0, 0);
 			text.enabled = false;

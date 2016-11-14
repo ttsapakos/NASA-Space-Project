@@ -3,7 +3,7 @@ using System.Collections;
 
 public class NoseConeScript : MonoBehaviour {
 
-	public float maxOxygen;
+	public float maxPower;
 
 	// Use this for initialization
 	void Start () {
