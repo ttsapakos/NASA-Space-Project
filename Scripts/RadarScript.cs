@@ -4,8 +4,6 @@ using System.Collections;
 
 public class RadarScript : MonoBehaviour {
 
-	public float minDistance;
-
 	private GameController gc;
 	private PlayerController pc;
 	private Vector3 playerPos;
@@ -68,7 +66,7 @@ public class RadarScript : MonoBehaviour {
 		updateRadar ();
 
 		updateKeyPress ();
-		if (radarActive) {
+		if (radarActive && pc.isActive () && pc.getCurrentPower () > 0) {
 			lr.SetWidth (0.25f, 0.25f);
 			text.enabled = true;
 			pc.decayPower ();

@@ -49,6 +49,11 @@ public class PlayerController : MonoBehaviour {
 	public float getCurrentPower() {
 		return currentPower;
 	}
+
+	// can the player move and have they left the ground?
+	public bool isActive () {
+		return this.canMove && this.leftGround;
+	}
 		
 	// Use this for initialization
 	void Start () {
@@ -209,9 +214,6 @@ public class PlayerController : MonoBehaviour {
 	public void decayPower () {
 		if (this.leftGround) {
 			currentPower -= powerDecayRate;
-			if (currentPower <= 0) {
-				stop ();
-			}
 		}
 	}
 

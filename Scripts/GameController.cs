@@ -33,6 +33,8 @@ public class GameController : MonoBehaviour {
 	private GameObject closestPlanet;
 	// The store object
 	private GameObject store;
+	// The player's resource bars
+	private GameObject resourceBars;
 
 	// Use this for initialization
 	void Start () {
@@ -42,6 +44,7 @@ public class GameController : MonoBehaviour {
 		resetText = resetGUI.GetComponent<Text> ();
 		planets = new List<GameObject> ();
 		store = GameObject.FindGameObjectWithTag ("Store");
+		resourceBars = GameObject.FindGameObjectWithTag ("ResourceBars");
 		store.SetActive (false);
 		init ();
 	}
@@ -61,6 +64,7 @@ public class GameController : MonoBehaviour {
 	// initialize everything and set the store to active
 	void reset() {
 		init ();
+		resourceBars.SetActive (false);
 		store.SetActive (true);
 		playerController.reset ();
 	}
@@ -70,6 +74,7 @@ public class GameController : MonoBehaviour {
 		healthBar.init ();
 		fuelBar.init ();
 		powerBar.init ();
+		resourceBars.SetActive (true);
 	}
 
 	public float getMaxDistance() {
