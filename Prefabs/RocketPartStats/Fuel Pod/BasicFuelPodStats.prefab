@@ -53,4 +53,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cost: 1
   image: {fileID: 21300000, guid: c9a19888941d44736892f0ea7f1483fe, type: 3}
-  modifier: 50
+  modifier: 100

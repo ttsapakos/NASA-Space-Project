@@ -2379,7 +2379,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 0b4555f7d1f0e488ba464390a0b095f1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: be6bb6413a96a4ef490db1f399db78d9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5386,7 +5386,7 @@ Prefab:
     - target: {fileID: 114000011677059404, guid: 8f4e9da3f9b6643478ba082b587700ec,
         type: 2}
       propertyPath: thrust
-      value: 14
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 212000010260226448, guid: 8f4e9da3f9b6643478ba082b587700ec,
         type: 2}
@@ -9762,7 +9762,7 @@ RectTransform:
   m_RootOrder: 4
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 19.5, y: -435}
+  m_AnchoredPosition: {x: 19.5, y: -505}
   m_SizeDelta: {x: 160, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &880424223
@@ -11661,7 +11661,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 276c2389a2d4943779becc1130baab49, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 07d5b3c8b384740908d852ee76796ca8, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -13200,6 +13200,11 @@ Prefab:
       propertyPath: maxOxygen
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 114000013642420112, guid: 306572a354c0a49c091ba6ec4bd4e1fc,
+        type: 2}
+      propertyPath: maxPower
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 306572a354c0a49c091ba6ec4bd4e1fc, type: 2}
   m_IsPrefabParent: 0
@@ -13306,7 +13311,7 @@ MonoBehaviour:
   resetGUI: {fileID: 1281441510}
   removePlanetDistance: 3000
   healthBar: {fileID: 1781520467}
-  oxygenBar: {fileID: 1494823912}
+  powerBar: {fileID: 1494823912}
   fuelBar: {fileID: 202493342}
 --- !u!4 &1133919901
 Transform:
@@ -16997,15 +17002,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1000010032107796, guid: 91854cfdd26d846cc99e7c4b5bc71634, type: 2}
       propertyPath: m_Name
-      value: OxygenBar
+      value: PowerBar
       objectReference: {fileID: 0}
     - target: {fileID: 1000011014912756, guid: 91854cfdd26d846cc99e7c4b5bc71634, type: 2}
       propertyPath: m_Name
-      value: OxygenBackdrop
+      value: PowerBackdrop
       objectReference: {fileID: 0}
     - target: {fileID: 1000010664265826, guid: 91854cfdd26d846cc99e7c4b5bc71634, type: 2}
       propertyPath: m_Name
-      value: OxygenBar
+      value: PowerBar
       objectReference: {fileID: 0}
     - target: {fileID: 212000011236401624, guid: 91854cfdd26d846cc99e7c4b5bc71634,
         type: 2}
@@ -19907,7 +19912,7 @@ Prefab:
     - target: {fileID: 114000010388507394, guid: e3c083c967f634850883ff451b28c4cf,
         type: 2}
       propertyPath: maxFuel
-      value: 50
+      value: 200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e3c083c967f634850883ff451b28c4cf, type: 2}
@@ -20845,8 +20850,8 @@ MonoBehaviour:
   maxZoom: 40
   smoothSpeed: 10
   fuelDecayRate: 1
-  oxygenDecayRate: 0.5
-  gravityMultiplier: 500
+  powerDecayRate: 1
+  gravityMultiplier: 400
 --- !u!4 &1839640615
 Transform:
   m_ObjectHideFlags: 0
@@ -20894,6 +20899,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5b7a156b3b924cb987684e645861df1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingFunds: 500000
 --- !u!1 &1841965921
 GameObject:
   m_ObjectHideFlags: 0

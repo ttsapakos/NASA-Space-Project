@@ -33,7 +33,7 @@ public class BuyPart : MonoBehaviour {
 		if (playerStats.getTotalMoney () >= statsObject.GetComponent<PartStats> ().cost) {
 			playerStats.addAmount (-1 * statsObject.GetComponent<PartStats> ().cost);
 			GameObject.FindGameObjectWithTag ("NoseCone").GetComponent<SpriteRenderer> ().sprite = statsObject.GetComponent<PartStats> ().image;
-			GameObject.FindGameObjectWithTag ("NoseCone").GetComponent<NoseConeScript> ().maxOxygen = statsObject.GetComponent<PartStats> ().modifier;
+			GameObject.FindGameObjectWithTag ("NoseCone").GetComponent<NoseConeScript> ().maxPower = statsObject.GetComponent<PartStats> ().modifier;
 		}
 	}
 
