@@ -7,25 +7,28 @@ public class ObstacleScript : MonoBehaviour {
 	public float maxLifeTime;
 
 	private ParticleSystem explosionEffect;
+	private PlayerController playerController;
 	private float timeToDestroy;
 
 	// Use this for initialization
 	void Start () {
 		explosionEffect = GetComponentInChildren<ParticleSystem> ();
-		init ();
+		playerController = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerController> ();
 		timeToDestroy = Time.time + maxLifeTime;
-	}
-
-	void init() {
 		this.GetComponent<SpriteRenderer> ().enabled = true;
 		this.GetComponent<CircleCollider2D> ().enabled = true;
 		explosionEffect.Clear ();
 	}
 
 	void OnTriggerEnter2D(Collider2D col) {
+		if (col.gameObject.CompareTag("Player") || col.gameObject.CompareTag("Planet") || col.gameObject.CompareTag("Earth")) {
 		this.GetComponent<SpriteRenderer> ().enabled = false;
-		this.GetComponent<CircleCollider2D> ().enabled = false;
-		explosionEffect.Play ();
+			this.GetComponent<CircleCollider2D> ().enabled = false;
+			explosionEffect.Play ();
+			if (col.gameObject.CompareTag ("Player")) {
+				playerController.addHealth (-1 * damage);
+			}
+		}
 	}
 
 	void checkLifeTime () {

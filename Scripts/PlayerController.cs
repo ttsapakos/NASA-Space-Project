@@ -46,6 +46,31 @@ public class PlayerController : MonoBehaviour {
 		return currentHealth;
 	}
 
+	public void addHealth (float h) {
+		currentHealth += h;
+		if (currentHealth > maxHealth) {
+			currentHealth = maxHealth;
+		}
+
+		if (currentHealth <= 0) {
+			stop ();
+		}
+	}
+
+	public void addFuel (float f) {
+		currentFuel += f;
+		if (currentFuel > maxFuel) {
+			currentFuel = maxFuel;
+		}
+	}
+
+	public void addPower (float p) {
+		currentPower += p;
+		if (currentPower > maxPower) {
+			currentPower = maxPower;
+		}
+	}
+
 	public float getCurrentPower() {
 		return currentPower;
 	}
@@ -206,7 +231,7 @@ public class PlayerController : MonoBehaviour {
 	// For collisions with objects whose colliders aren't triggers, i.e. Planets
 	void OnCollisionEnter2D(Collision2D col) {
 		// double check that we are hitting a planet
-		if (!col.gameObject.CompareTag ("Obstacle") && leftGround) {
+		if ((col.gameObject.CompareTag ("Planet") || col.gameObject.CompareTag ("Earth")) && leftGround) {
 			stop ();
 		}
 	}

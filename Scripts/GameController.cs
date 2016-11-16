@@ -70,6 +70,9 @@ public class GameController : MonoBehaviour {
 		foreach (GameObject go in GameObject.FindGameObjectsWithTag("Obstacle")) {
 			GameObject.Destroy (go);
 		}
+		foreach (GameObject go in GameObject.FindGameObjectsWithTag("ResourcePickup")) {
+			GameObject.Destroy (go);
+		}
 	}
 
 	// Called to start the round
