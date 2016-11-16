@@ -67,6 +67,9 @@ public class GameController : MonoBehaviour {
 		resourceBars.SetActive (false);
 		store.SetActive (true);
 		playerController.reset ();
+		foreach (GameObject go in GameObject.FindGameObjectsWithTag("Obstacle")) {
+			GameObject.Destroy (go);
+		}
 	}
 
 	// Called to start the round

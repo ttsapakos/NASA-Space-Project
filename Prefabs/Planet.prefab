@@ -85,7 +85,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55c10609e246e49189f3295edd31778e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotateFactor: 0.2
+  maxRotateFactor: 0.15
 --- !u!212 &212000010775550398
 SpriteRenderer:
   m_ObjectHideFlags: 1
