@@ -17,10 +17,13 @@ public class SpawnItem : MonoBehaviour {
 
 	private float nextTimeToSearch = 0;
 	private GameObject player;
+	private GameObject closestPlanet;
+	private GameController gc;
 
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag ("Player");
+		gc = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
 	}
 
 	void Spawn () {
@@ -28,7 +31,8 @@ public class SpawnItem : MonoBehaviour {
 			Vector3 playerVelocity = player.GetComponent<Rigidbody2D> ().velocity;
 			float playerVeloMagnitude = playerVelocity.magnitude;
 
-			if (playerVeloMagnitude > spawnSpeedThreshold) {
+			closestPlanet = gc.getClosestPlanet (this.gameObject.transform.position);
+			if (playerVeloMagnitude > spawnSpeedThreshold && !closestPlanet.CompareTag ("Earth")) {
 				Vector3 playerVeloNormalized = playerVelocity.normalized;
 				float x = player.transform.position.x + (playerVeloNormalized.x * spawnDistance) + Random.Range (-1 * spawnRadius, spawnRadius);
 				float y = player.transform.position.y + (playerVeloNormalized.y * spawnDistance) + Random.Range (-1 * spawnRadius, spawnRadius);;

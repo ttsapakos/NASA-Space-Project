@@ -11,6 +11,8 @@ public class PlanetSpawner : MonoBehaviour {
 	// Boundaries between which the planet width can be
 	public float minWidth;
 	public float maxWidth;
+	// array of possible sprites
+	public Sprite [] spriteArray;
 
 	// the distance the player must be from the closest planet in order to spawn a new planet
 	private float spawnDistance;
@@ -57,6 +59,9 @@ public class PlanetSpawner : MonoBehaviour {
 		// set the new width
 		float newWidth = Random.Range (minWidth, maxWidth);
 		newPlanet.transform.localScale = new Vector3 (newWidth, newWidth, 1);
+		// set the sprite of the new planet
+		Sprite temp = spriteArray [Random.Range (0, spriteArray.Length - 1)];
+		newPlanet.GetComponent<SpriteRenderer> ().sprite = temp;
 
 		gc.addPlanet (newPlanet);
 	}
