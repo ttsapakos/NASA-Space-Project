@@ -54,3 +54,4 @@ MonoBehaviour:
   cost: 10000
   image: {fileID: 21300000, guid: f2d5de0d59ba44604bcfce988a851d85, type: 3}
   modifier: 2000
+  purchased: 0

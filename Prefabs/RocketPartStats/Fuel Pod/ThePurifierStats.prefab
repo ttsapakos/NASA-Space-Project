@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62ee9c15cbc74427aaebf3782cdf43a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 3000000
+  cost: 1000000
   image: {fileID: 21300000, guid: f7b20aa27ae8a43d591868073dbab4e8, type: 3}
   modifier: 5000
+  purchased: 0

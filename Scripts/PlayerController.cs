@@ -11,11 +11,16 @@ public class PlayerController : MonoBehaviour {
 	public float powerDecayRate;
 	public float gravityMultiplier;
 
+	public AudioClip shipExplosion;
+	public AudioClip hitObstacle;
+	public AudioClip pickUpResource;
+
 	private Rigidbody2D rb;
 	private GameObject closestPlanet;
 	private ParticleSystem explosionEffect;
 	private ParticleSystem thrusterEffect;
 	private GameObject Earth;
+	private AudioSource audioSource;
 
 	private GameObject thrusterObject;
 	private GameObject wingsObject;
@@ -36,6 +41,7 @@ public class PlayerController : MonoBehaviour {
 	private float currentFuel;
 	private float maxHealth;
 	private float currentHealth;
+	private AudioSource thrusterAudio;
 
 	// Getters for current levels of resources
 	public float getCurrentFuel() {
@@ -54,11 +60,18 @@ public class PlayerController : MonoBehaviour {
 
 		if (currentHealth <= 0) {
 			stop ();
+		// if health was added, play pick up resource sound
+		} else if (currentHealth > 0 && h > 0) {
+			audioSource.PlayOneShot (pickUpResource, 0.15f);
+		} else {
+		// otherwise it was an obstacle
+			audioSource.PlayOneShot (hitObstacle, 0.15f);
 		}
 	}
 
 	public void addFuel (float f) {
 		currentFuel += f;
+		audioSource.PlayOneShot (pickUpResource, 0.15f);
 		if (currentFuel > maxFuel) {
 			currentFuel = maxFuel;
 		}
@@ -66,6 +79,7 @@ public class PlayerController : MonoBehaviour {
 
 	public void addPower (float p) {
 		currentPower += p;
+		audioSource.PlayOneShot (pickUpResource, 0.15f);
 		if (currentPower > maxPower) {
 			currentPower = maxPower;
 		}
@@ -85,6 +99,8 @@ public class PlayerController : MonoBehaviour {
 		rb = GetComponent<Rigidbody2D> ();
 		explosionEffect = GameObject.FindGameObjectWithTag ("Explosion").GetComponent<ParticleSystem> ();
 		thrusterEffect = GameObject.FindGameObjectWithTag ("ThrusterEffect").GetComponent<ParticleSystem> ();
+		audioSource = gc.GetComponent<AudioSource> ();
+		thrusterAudio = this.GetComponent<AudioSource> ();
 		Earth = gc.getClosestPlanet (transform.position);
 		canMove = true;
 		init ();
@@ -165,8 +181,14 @@ public class PlayerController : MonoBehaviour {
 			Vector2 force = new Vector3 (xThrust, yThrust);
 			rb.AddForce (force);
 			currentFuel -= fuelDecayRate;
+
+			if (!thrusterAudio.isPlaying) {
+				thrusterAudio.Play ();
+			}
+
 			thrusterEffect.Play ();
 		} else {
+			thrusterAudio.Stop ();
 			thrusterEffect.Stop ();
 		}
 	}
@@ -267,8 +289,10 @@ public class PlayerController : MonoBehaviour {
 		rb.freezeRotation = true;
 		thrusterEffect.Stop ();
 		explosionEffect.Play ();
+		audioSource.PlayOneShot (shipExplosion, 0.7f);
 		gc.setCanReset (true);
 		hideParts ();
+		thrusterAudio.Stop ();
 	}
 
 	// Update is called once per frame

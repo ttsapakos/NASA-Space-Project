@@ -3,7 +3,34 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class GameController : MonoBehaviour {
+
+	public string winText = "Pants Delivered! Congratulations!";
+
+	float [] rewardDistances = new float[]{
+		30.0f,
+		1500.0f,
+		4000.0f,
+		8000.0f,
+		15000.0f,
+	};
+
+	float [] rewardAmounts = new float[]{
+		1000.0f,
+		20000.0f,
+		100000.0f,
+		500000.0f,
+		2000000.0f
+	};
+
+	bool [] rewardReached = new bool[]{
+		false,
+		false,
+		false,
+		false,
+		false
+	};
 
 	// Reset text gui object
 	public GameObject resetGUI;
@@ -35,6 +62,7 @@ public class GameController : MonoBehaviour {
 	private GameObject store;
 	// The player's resource bars
 	private GameObject resourceBars;
+
 
 	// Use this for initialization
 	void Start () {
@@ -144,17 +172,34 @@ public class GameController : MonoBehaviour {
 
 	// shows reset text, with distance traveled and money earned
 	void showReset() {
-		resetText.text = "Total Distance: " + getMaxDistance () + "km\n" + "Payout: $" + distanceToDollars () + "\n\nPress Enter to Continue";
-		resetGUI.SetActive (true);
-		if (Input.GetKeyDown (KeyCode.Return)) {
-			playerStats.addAmount (distanceToDollars ());
-			reset ();
+		string tempText = "Total Distance: " + getMaxDistance () + "km\n";
+		float tempReward = distanceToDollars ();
+
+		for (int i = 0; i < rewardDistances.Length; i++) {
+			if (getMaxDistance () >= rewardDistances [i] && !rewardReached [i]) {
+				rewardReached [i] = true;
+				tempReward += rewardAmounts [i];
+				tempText += "Congratulations on reaching " + rewardDistances [i] + "km! Bonus: $" + rewardAmounts [i] + "\n";
+				if (i == rewardDistances.Length - 1) {
+					tempText += winText + '\n';
+				}
+			}
 		}
+			
+		resetText.text = tempText + "Payout: $" + tempReward + "\n\nPress Enter to Continue";
+		playerStats.addAmount (tempReward);
+		resetGUI.SetActive (true);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (canReset)
-			showReset ();
+		if (canReset) {
+			if (!resetGUI.activeSelf) {
+				showReset ();
+			}
+			if (Input.GetKeyDown (KeyCode.Return)) {
+				reset ();
+			}
+		}
 	}
 }

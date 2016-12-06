@@ -56,3 +56,4 @@ MonoBehaviour:
   color: {r: 0, g: 0.5529412, b: 0.69803923, a: 1}
   lifeTime: 0.7
   rate: 70
+  purchased: 0
